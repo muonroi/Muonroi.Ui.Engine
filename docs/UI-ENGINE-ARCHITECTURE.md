@@ -14,6 +14,13 @@
 3. Adapter maps abstract components to UI-library components.
 4. FE renders pages from runtime state; permissions and disabled reasons are already resolved by backend.
 
+## UI Library Adapters
+
+- Core keeps abstract component types (`page-content`, `tab-content`, `panel`...).
+- Adapter packages map these types into specific UI libraries.
+- Current adapter: `@muonroi/ui-engine-primeng`.
+- Additional adapters can be shipped without changing backend contracts.
+
 ## Hybrid Boundary
 
 ### Backend (`MuonroiBuildingBlock`)

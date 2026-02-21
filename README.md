@@ -13,6 +13,7 @@ Hybrid UI engine runtime for Muonroi platform.
 - `@muonroi/ui-engine-core`: contracts, runtime store, API client, render planner.
 - `@muonroi/ui-engine-angular`: Angular-oriented mapping helpers.
 - `@muonroi/ui-engine-react`: React-oriented mapping helpers.
+- `@muonroi/ui-engine-primeng`: PrimeNG adapter and mapping helpers.
 - `Muonroi.Ui.Engine.Mvc`: ASP.NET MVC runtime client package.
 
 ## Local Development
