@@ -28,4 +28,10 @@ npm run build
 ./scripts/generate-ui-clients.sh --openapi http://localhost:5000/swagger/v1/swagger.json --framework all
 ```
 
+Template integration helper (inside generated templates):
+
+```bash
+./scripts/sync-ui-engine.sh --ui-engine-path ../Muonroi.Ui.Engine --openapi http://localhost:5000/swagger/v1/swagger.json --framework all
+```
+
 For detailed architecture, see `docs/UI-ENGINE-ARCHITECTURE.md`.
