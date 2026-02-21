@@ -1,0 +1,30 @@
+# UI Engine Architecture
+
+## Design Principles
+
+1. Backend-first metadata: menu, screen, action, and visibility are authored by backend.
+2. Contract-first runtime: frontend renders from `MUiEngineManifest` without embedding business permission logic.
+3. Adapter-driven UI kit: component mapping is pluggable (PrimeNG, Material, custom kits).
+4. Auto client generation: API models can be generated from OpenAPI and consumed by runtime.
+
+## Runtime Flow
+
+1. FE boots and calls `GET /api/v1/auth/ui-engine/current`.
+2. `MUiEngineRuntime` normalizes manifest and prepares navigation/screen/action indexes.
+3. Adapter maps abstract components to UI-library components.
+4. FE renders pages from runtime state; permissions and disabled reasons are already resolved by backend.
+
+## Hybrid Boundary
+
+### Backend (`MuonroiBuildingBlock`)
+
+- Contracts (`MUiEngineManifest` and related types)
+- Composition logic from permissions/RBAC/license
+- API endpoints (`ui-engine/{userId}`, `ui-engine/current`)
+
+### UI Engine Repo (`Muonroi.Ui.Engine`)
+
+- Runtime state and helpers
+- Framework adapters
+- MVC integration client
+- OpenAPI generation scripts
