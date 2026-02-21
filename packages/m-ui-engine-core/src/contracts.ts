@@ -11,6 +11,14 @@ export interface MUiEngineManifest {
   dataSources: MUiEngineDataSource[];
 }
 
+export interface MUiEngineContractInfo {
+  runtimeSchemaVersion: string;
+  supportedSchemaVersions: string[];
+  currentManifestEndpoint: string;
+  userManifestEndpointTemplate: string;
+  generatedAtUtc: string;
+}
+
 export interface MUiEngineNavigationGroup {
   groupName: string;
   groupDisplayName: string;

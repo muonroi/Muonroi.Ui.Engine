@@ -1,4 +1,4 @@
-import type { MUiEngineManifest } from "./contracts.js";
+import type { MUiEngineContractInfo, MUiEngineManifest } from "./contracts.js";
 import { MUiEngineRuntime } from "./runtime.js";
 import { MAssertUiEngineManifest, MUiEngineValidationError } from "./validation.js";
 
@@ -13,10 +13,11 @@ interface MUiEngineBootstrapCacheEntry {
 export interface MUiEngineManifestProvider {
   MLoadCurrent(): Promise<MUiEngineManifest>;
   MLoadByUserId(userId: string): Promise<MUiEngineManifest>;
+  MLoadContractInfo?(): Promise<MUiEngineContractInfo>;
 }
 
 export interface MUiEngineTelemetryEvent {
-  kind: "cache_hit" | "cache_miss" | "manifest_loaded" | "manifest_invalid";
+  kind: "cache_hit" | "cache_miss" | "manifest_loaded" | "manifest_invalid" | "contract_checked";
   source: "current" | "by_user";
   userId?: string;
   elapsedMs?: number;
@@ -57,6 +58,23 @@ export class MUiEngineBootstrapper {
 
   public MResetCache(): void {
     this.mCache.clear();
+  }
+
+  public async MCheckContractCompatibility(expectedSchemaVersion = "mui.engine.v1"): Promise<boolean> {
+    if (!this.mManifestProvider.MLoadContractInfo) {
+      return true;
+    }
+
+    const contractInfo = await this.mManifestProvider.MLoadContractInfo();
+    const isCompatible = contractInfo.supportedSchemaVersions.includes(expectedSchemaVersion);
+
+    this.mOnTelemetry?.({
+      kind: "contract_checked",
+      source: "current",
+      schemaVersion: contractInfo.runtimeSchemaVersion
+    });
+
+    return isCompatible;
   }
 
   private async MLoad(

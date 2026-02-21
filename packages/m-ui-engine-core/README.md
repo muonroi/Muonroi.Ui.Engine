@@ -9,3 +9,4 @@ Main exports:
 - `MCreateEngineFetch`
 - `MBuildRenderPlan`
 - `MValidateUiEngineManifest`
+- `MCheckContractCompatibility` via bootstrapper + `/auth/ui-engine/contract-info`

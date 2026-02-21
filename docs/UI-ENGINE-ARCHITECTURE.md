@@ -10,9 +10,10 @@
 ## Runtime Flow
 
 1. FE boots and calls `GET /api/v1/auth/ui-engine/current`.
-2. `MUiEngineRuntime` normalizes manifest and prepares navigation/screen/action indexes.
-3. Adapter maps abstract components to UI-library components.
-4. FE renders pages from runtime state; permissions and disabled reasons are already resolved by backend.
+2. FE can optionally call `GET /api/v1/auth/ui-engine/contract-info` for schema compatibility check.
+3. `MUiEngineRuntime` normalizes manifest and prepares navigation/screen/action indexes.
+4. Adapter maps abstract components to UI-library components.
+5. FE renders pages from runtime state; permissions and disabled reasons are already resolved by backend.
 
 ## UI Library Adapters
 

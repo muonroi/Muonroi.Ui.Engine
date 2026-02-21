@@ -94,4 +94,24 @@ describe("MUiEngineBootstrapper", () => {
     expect(events).toContain("manifest_loaded");
     expect(events).toContain("cache_hit");
   });
+
+  it("checks contract compatibility when provider exposes contract info", async () => {
+    const manifest = MCreateManifest();
+    const bootstrapper = new MUiEngineBootstrapper({
+      mManifestProvider: {
+        MLoadCurrent: async () => manifest,
+        MLoadByUserId: async () => manifest,
+        MLoadContractInfo: async () => ({
+          runtimeSchemaVersion: "mui.engine.v1",
+          supportedSchemaVersions: ["mui.engine.v1"],
+          currentManifestEndpoint: "/api/v1/auth/ui-engine/current",
+          userManifestEndpointTemplate: "/api/v1/auth/ui-engine/{userId}",
+          generatedAtUtc: new Date().toISOString()
+        })
+      }
+    });
+
+    await expect(bootstrapper.MCheckContractCompatibility("mui.engine.v1")).resolves.toBe(true);
+    await expect(bootstrapper.MCheckContractCompatibility("mui.engine.v2")).resolves.toBe(false);
+  });
 });

@@ -1,4 +1,4 @@
-import type { MUiEngineManifest } from "./contracts.js";
+import type { MUiEngineContractInfo, MUiEngineManifest } from "./contracts.js";
 
 export interface MEngineHttpClientOptions {
   baseApiUrl: string;
@@ -64,5 +64,9 @@ export class MUiEngineApiClient {
 
   public async MLoadCurrent(): Promise<MUiEngineManifest> {
     return await this.mFetch<MUiEngineManifest>("/auth/ui-engine/current");
+  }
+
+  public async MLoadContractInfo(): Promise<MUiEngineContractInfo> {
+    return await this.mFetch<MUiEngineContractInfo>("/auth/ui-engine/contract-info");
   }
 }
