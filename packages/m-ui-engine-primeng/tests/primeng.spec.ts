@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   MMapActionsToPrimeNgButtons,
   MMapNavigationGroupsToPrimeNgMenu,
-  MPrimeNgRenderAdapter
+  MPrimeNgFreyaMenuLayoutStrategy,
+  MPrimeNgRenderAdapter,
+  MResolvePrimeNgMenuLayoutStrategy
 } from "../src/index.js";
 import { MBuildRenderPlan, type MUiEngineScreen } from "@muonroi/ui-engine-core";
 
@@ -82,5 +84,59 @@ describe("PrimeNG adapter", () => {
 
     const plan = MBuildRenderPlan(screen, new MPrimeNgRenderAdapter());
     expect(plan[0].resolvedComponentType).toBe("MPrimeNgPageContent");
+  });
+
+  it("maps metadata menu and runtime routes with Freya strategy", () => {
+    const strategy = new MPrimeNgFreyaMenuLayoutStrategy();
+
+    const runtimeMenu = strategy.MMapRuntimeGroups([
+      {
+        groupName: "admin",
+        groupDisplayName: "Admin",
+        items: [
+          {
+            nodeKey: "node:roles",
+            uiKey: "admin.roles.view",
+            title: "Roles",
+            route: "/admin/roles",
+            type: "menu",
+            order: 1,
+            isVisible: true,
+            isEnabled: true,
+            actionKeys: [],
+            children: []
+          }
+        ]
+      }
+    ]);
+
+    const metadataMenu = strategy.MMapMetadataGroups([
+      {
+        groupName: "ops",
+        groupDisplayName: "Operations",
+        actions: [
+          {
+            name: "Notifications",
+            uiKey: "ops.notification",
+            type: "menu",
+            isGranted: true,
+            children: []
+          }
+        ]
+      }
+    ]);
+
+    expect(runtimeMenu[0].items?.[0].routerLink).toEqual(["/muonroi/admin/roles"]);
+    expect(metadataMenu[0].items?.[0].routerLink).toEqual(["/muonroi/ops/notification"]);
+  });
+
+  it("resolves menu strategy by alias and falls back to default", () => {
+    const strategy = new MPrimeNgFreyaMenuLayoutStrategy();
+
+    const byAlias = MResolvePrimeNgMenuLayoutStrategy("freya", [strategy]);
+    const fallback = MResolvePrimeNgMenuLayoutStrategy("unknown-layout", [strategy]);
+
+    expect(byAlias.mLayoutId).toBe("primeng-freya");
+    expect(fallback.mLayoutId).toBe("primeng-freya");
   });
 });

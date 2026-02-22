@@ -83,6 +83,11 @@ run_openapi_generator() {
     return
   fi
 
+  if command -v npx >/dev/null 2>&1; then
+    npx --yes @openapitools/openapi-generator-cli generate -g "${generator}" -i "${SPEC_FILE}" -o "${outdir}" ${extra}
+    return
+  fi
+
   if command -v docker >/dev/null 2>&1; then
     local abs_spec="${SPEC_FILE}"
     case "${abs_spec}" in

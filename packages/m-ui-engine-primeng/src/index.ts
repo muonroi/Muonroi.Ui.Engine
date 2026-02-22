@@ -80,3 +80,5 @@ function MResolvePrimeNgActionIcon(action: MUiEngineAction): string {
 
   return "pi pi-bolt";
 }
+
+export * from "./menu-layout.js";
